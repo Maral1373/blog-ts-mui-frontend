@@ -1,24 +1,27 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const getComments = createAsyncThunk("comments/getComments", async ({ postId }, { rejectWithValue }) => {
-    try {
-        const result = await fetch(`http://localhost:3000/comments/${postId}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        if (!result.ok || result.status !== 200)
-            throw new Error("response was not OK")
-        const data = await result.json();
-        return data;
-    } catch (error) {
-        return rejectWithValue(error.message)
-    }
-});
+export const getComments = createAsyncThunk("comments/getComments",
+    async ({ postId }, { rejectWithValue }) => {
+        try {
+            const result = await fetch(
+                `http://localhost:3000/comments/${postId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            if (!result.ok || result.status !== 200)
+                throw new Error("response was not OK")
+            const data = await result.json();
+            return { data, postId };
+        } catch (error) {
+            return rejectWithValue(error.message)
+        }
+    });
 
 export const createComment = createAsyncThunk("comments/createComment",
     async ({ text, postId, token }, { rejectWithValue }) => {
+        console.log({ text, postId, token })
         try {
             const result = await fetch("http://localhost:3000/comments", {
                 method: "POST",
@@ -47,7 +50,6 @@ export const deleteComment = createAsyncThunk("comments/deleteComment",
                     "Content-Type": "application/json",
                     Autorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({ postId })
             });
             if (!result.ok || result.status !== 204)
                 throw new Error("response was not OK")
@@ -105,27 +107,14 @@ export const dislikeComment = createAsyncThunk("comments/dislikeComment",
 const commentsSlice = createSlice({
     name: "comments",
     initialState: {
-        comments: [],
+        comments: {},
     },
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(getComments.fulfilled, (state, action) => {
-            state.comments = action.payload;
-        })
-        builder.addCase(createComment.fulfilled, (state, action) => {
-            state.createComment = action.payload;
-        })
-        builder.addCase(deleteComment.fulfilled, (state, action) => {
-            state.deleteComment = action.payload;
-        })
-        builder.addCase(likeComment.fulfilled, (state, action) => {
-            state.likeComment = action.payload;
-        })
-        builder.addCase(dislikeComment.fulfilled, (state, action) => {
-            state.dislikeComment = action.payload;
+            state.comments[action.payload.postId] = action.payload.data;
         })
     }
 });
 
 export default commentsSlice.reducer;
-// export const {  } = commentsSlice.actions;
