@@ -1,22 +1,23 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./Layout";
-import Home from "./Home";
+import Layout from "./components/Layout";
+import Home from "./pages/Home";
 import Register from "./pages/Register";
-import { ThemeProvider } from "@emotion/react";
-import theme from "./components/theme";
+import Login from "./pages/Login";
+import WritePost from "./pages/WritePost";
 
 const AppRoutes = () => {
+
 	return (
-		<ThemeProvider theme={theme}>
-			<BrowserRouter>
-				<Layout>
-					<Routes>
-						<Route path="/" element={<Home />} />
-						<Route path="/Register" element={<Register />} />
-					</Routes>
-				</Layout>
-			</BrowserRouter>
-		</ThemeProvider>
+		<BrowserRouter>
+			<Layout>
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path="/Register" element={<Register />} />
+					<Route path="/Login" element={<Login />} />
+					<Route path="/Write" element={<WritePost />} />
+				</Routes>
+			</Layout>
+		</BrowserRouter>
 	);
 };
 

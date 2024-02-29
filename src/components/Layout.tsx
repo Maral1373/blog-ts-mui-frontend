@@ -1,24 +1,25 @@
 import * as React from "react";
-import {
-	AppBar,
-	Box,
-	Toolbar,
-	IconButton,
-	Typography,
-	Drawer,
-	List,
-	ListItem,
-	ListItemIcon,
-	ListItemText,
-	CssBaseline,
-	Button,
-	Divider,
-	ListItemButton,
-} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import InfoIcon from "@mui/icons-material/Info";
 import { Link } from "react-router-dom";
+import {
+	Box,
+	Button,
+	Typography,
+	Divider,
+	List,
+	ListItem,
+	ListItemButton,
+	ListItemIcon,
+	ListItemText,
+	CssBaseline,
+	AppBar,
+	Toolbar,
+	IconButton,
+	Drawer,
+} from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 
 interface Props {
 	window?: () => Window;
@@ -26,14 +27,24 @@ interface Props {
 }
 
 const drawerWidth = 240;
-const navBarItems = [
-	{ text: "Home", icon: <HomeIcon />, link: "/" },
-	{ text: "Register", icon: <InfoIcon />, link: "/Register" },
-];
 
-export default function DrawerAppBar(props: Props) {
+export default function Layout(props: Props) {
+	const loggedInUser = useSelector((state) => state.users.loggedInUser);
+	const logoutUser = useSelector((state) => state.users.logoutUser);
 	const { window, children } = props;
 	const [mobileOpen, setMobileOpen] = React.useState(false);
+	const dispatch = useDispatch();
+
+	const navBarItems = [
+		{ text: "Home", icon: <HomeIcon />, link: "/" },
+		{ text: "Register", icon: <InfoIcon />, link: "/Register" },
+		{
+			text: loggedInUser ? "Logout" : "Login",
+			icon: <InfoIcon />,
+			link: loggedInUser ? "/Login" : "/Login",
+		},
+		{ text: "Write Post", icon: <InfoIcon />, link: "/Write" },
+	];
 
 	const handleDrawerToggle = () => {
 		setMobileOpen((prevState) => !prevState);
@@ -42,7 +53,7 @@ export default function DrawerAppBar(props: Props) {
 	const drawer = (
 		<Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
 			<Typography variant="h6" sx={{ my: 2 }}>
-				MUI
+				Blog
 			</Typography>
 			<Divider />
 			<List>
@@ -61,6 +72,9 @@ export default function DrawerAppBar(props: Props) {
 	const container =
 		window !== undefined ? () => window().document.body : undefined;
 
+	const handleLogoutuser = () => {
+		dispatch(logoutUser());
+	};
 	return (
 		<Box sx={{ display: "flex" }}>
 			<CssBaseline />
@@ -83,7 +97,7 @@ export default function DrawerAppBar(props: Props) {
 							display: { xs: "none", sm: "block" },
 						}}
 					>
-						MUI
+						Blog
 					</Typography>
 					<Box sx={{ display: { xs: "none", sm: "block" } }}>
 						{navBarItems.map((item) => (

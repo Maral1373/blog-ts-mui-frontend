@@ -3,24 +3,24 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+import { createPost } from "../redux/reducers/postsSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
-import { registerUser } from "../redux/reducers/usersSlice";
 
-export default function RegisterForm() {
+export default function LoginForm() {
 	const formRef = useRef(null);
-	const navigate = useNavigate();
+	const loggedInUser = useSelector((state) => state.users.loggedInUser);
 	const dispatch = useDispatch();
 
 	const onSubmit = (e) => {
 		e.preventDefault();
 		const data = new FormData(e.target);
 		dispatch(
-			registerUser({
-				username: data.get("username"),
-				email: data.get("email"),
-				password: data.get("password"),
+			createPost({
+				title: data.get("title"),
+				text: data.get("text"),
+				author: loggedInUser.username,
+				token: loggedInUser.token,
 			})
 		);
 		formRef.current.reset();
@@ -30,39 +30,29 @@ export default function RegisterForm() {
 		<Container component="main" maxWidth="xs">
 			<CssBaseline />
 			<Typography component="h1" variant="h5">
-				Register
+				Say something
 			</Typography>
-			<form noValidate onSubmit={onSubmit} ref={formRef}>
+			<form onSubmit={onSubmit} ref={formRef} noValidate>
 				<TextField
-					variant="outlined"
+					// variant="outlined"
 					margin="normal"
 					required
 					fullWidth
-					id="username"
-					label="Username"
-					name="username"
-					autoComplete="username"
+					id="title"
+					label="Title"
+					name="title"
+					autoFocus
 				/>
 				<TextField
-					variant="outlined"
+					// variant="outlined"
 					margin="normal"
 					required
 					fullWidth
-					id="email"
-					label="Email"
-					name="email"
-					autoComplete="email"
-				/>
-				<TextField
-					variant="outlined"
-					margin="normal"
-					required
-					fullWidth
-					name="password"
-					label="Password"
-					type="password"
-					id="password"
-					autoComplete="new-password"
+					multiline
+					name="text"
+					label="Text"
+					type="text"
+					id="text"
 				/>
 				<Button
 					type="submit"
@@ -70,7 +60,7 @@ export default function RegisterForm() {
 					variant="contained"
 					color="primary"
 				>
-					Register
+					Submit
 				</Button>
 			</form>
 		</Container>
