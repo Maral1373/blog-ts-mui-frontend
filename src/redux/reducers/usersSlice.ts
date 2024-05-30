@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { API_URL } from "../../constants";
 
 export const registerUser = createAsyncThunk(
   "users/registerUser",
   async ({ username, email, password }, { rejectWithValue }) => {
     try {
       const result = await fetch(
-        `${import.meta.env.REACT_APP_API_URL}/auth/register`,
+        `${API_URL}/auth/register`,
         {
           method: "POST",
           headers: {
@@ -31,7 +32,7 @@ export const loginUser = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const result = await fetch(
-        `${import.meta.env.REACT_APP_API_URL}/auth/login`,
+        `${API_URL}/auth/login`,
         {
           method: "POST",
           headers: {
@@ -55,7 +56,7 @@ export const getUsers = createAsyncThunk(
   "users/getUsers",
   async (_, { rejectWithValue }) => {
     try {
-      const result = await fetch(`${import.meta.env.REACT_APP_API_URL}/users`, {
+      const result = await fetch(`${API_URL}/users`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { API_URL } from "../../constants";
 
 export const getComments = createAsyncThunk(
   "comments/getComments",
   async ({ postId }, { rejectWithValue }) => {
     try {
       const result = await fetch(
-        `${import.meta.env.REACT_APP_API_URL}/comments/${postId}`,
+        `${API_URL}/comments/${postId}`,
         {
           method: "GET",
           headers: {
@@ -29,7 +30,7 @@ export const createComment = createAsyncThunk(
     console.log({ text, postId, token });
     try {
       const result = await fetch(
-        `${import.meta.env.REACT_APP_API_URL}/comments`,
+        `${API_URL}/comments`,
         {
           method: "POST",
           headers: {
@@ -54,7 +55,7 @@ export const deleteComment = createAsyncThunk(
   async ({ commentId, token }, { rejectWithValue }) => {
     try {
       const result = await fetch(
-        `${import.meta.env.REACT_APP_API_URL}/comments/${commentId}`,
+        `${API_URL}/comments/${commentId}`,
         {
           method: "DELETE",
           headers: {
@@ -77,7 +78,7 @@ export const likeComment = createAsyncThunk(
   "comments/likeComment",
   async ({ commentId }, { rejectWithValue }) => {
     try {
-      const result = await fetch(`${import.meta.env.REACT_APP_API_URL}/comments/like`, {
+      const result = await fetch(`${API_URL}/comments/like`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -100,7 +101,7 @@ export const dislikeComment = createAsyncThunk(
   async ({ commentId }, { rejectWithValue }) => {
     try {
       const result = await fetch(
-        `${import.meta.env.REACT_APP_API_URL}/comments/dislike`,
+        `${API_URL}/comments/dislike`,
         {
           method: "POST",
           headers: {

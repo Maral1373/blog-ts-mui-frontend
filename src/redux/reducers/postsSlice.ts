@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { API_URL } from "../../constants";
 
 export const getPosts = createAsyncThunk(
   "posts/getPosts",
   async (_, { rejectWithValue }) => {
     try {
-      const result = await fetch(`${import.meta.env.REACT_APP_API_URL}/posts`, {
+      const result = await fetch(`${API_URL}/posts`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -24,7 +25,7 @@ export const createPost = createAsyncThunk(
   "posts/createPost",
   async ({ title, text, author, token }, { rejectWithValue }) => {
     try {
-      const result = await fetch(`${import.meta.env.REACT_APP_API_URL}/posts`, {
+      const result = await fetch(`${API_URL}/posts`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -47,17 +48,14 @@ export const deletePost = createAsyncThunk(
   "posts/deletePost",
   async ({ postId, token }, { rejectWithValue }) => {
     try {
-      const result = await fetch(
-        `${import.meta.env.REACT_APP_API_URL}/posts/${postId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Autorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ postId }),
-        }
-      );
+      const result = await fetch(`${API_URL}/posts/${postId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Autorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ postId }),
+      });
       if (!result.ok || result.status !== 204)
         throw new Error("response was not OK");
       const data = await result.json();
@@ -72,16 +70,13 @@ export const likePost = createAsyncThunk(
   "posts/likePost",
   async ({ postId }, { rejectWithValue }) => {
     try {
-      const result = await fetch(
-        `${import.meta.env.REACT_APP_API_URL}/posts/like`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ postId }),
-        }
-      );
+      const result = await fetch(`${API_URL}/posts/like`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ postId }),
+      });
       if (!result.ok || result.status !== 200)
         throw new Error("response was not OK");
       const data = await result.json();
@@ -97,16 +92,13 @@ export const dislikePost = createAsyncThunk(
   "posts/dislikePost",
   async ({ postId }, { rejectWithValue }) => {
     try {
-      const result = await fetch(
-        `${import.meta.env.REACT_APP_API_URL}/posts/dislike`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ postId }),
-        }
-      );
+      const result = await fetch(`${API_URL}/posts/dislike`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ postId }),
+      });
       if (!result.ok || result.status !== 200)
         throw new Error("response was not OK");
       const data = await result.json();
